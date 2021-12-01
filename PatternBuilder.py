@@ -35,8 +35,6 @@ class PatternBuilder:
                 output.append(c)
         return "".join(output)
 
-
-
     def __init__(self):
         junk = 1
         self.data = []
@@ -69,6 +67,7 @@ class PatternBuilder:
         )
 
     def output(self, filename, data_as_list):
+        data_as_list.sort()
         print(f"file {filename} has {len(data_as_list)} records")
         with open(filename, "wt") as ofp:
             for rec in data_as_list:
