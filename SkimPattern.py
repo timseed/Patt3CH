@@ -29,7 +29,7 @@ class SkimmerPattern:
 
     def load_pattern(self, pattern_file_str:str):
         with open(pattern_file_str, 'rt') as pattern_file:
-            patt = [d.upper().strip() for d in pattern_file.read().split()[:-1]]
+            patt = [d[2:].upper() for d in pattern_file.read().split('\n')[:-1]]
 
         for p in patt:
             self.skimmer_data[p] = {}

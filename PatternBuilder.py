@@ -21,7 +21,7 @@ class PatternBuilder:
             elif c.isalpha():
                 output.append("@")
             else:
-                output.append("//")
+                output.append("/")
         return "".join(output)
 
     def call_to_skimmer_format3(self, call):
@@ -71,7 +71,7 @@ class PatternBuilder:
         print(f"file {filename} has {len(data_as_list)} records")
         with open(filename, "wt") as ofp:
             for rec in data_as_list:
-                ofp.write("{}\n".format(rec))
+                ofp.write("  {}\n".format(rec))
 
 
 if __name__ == "__main__":
