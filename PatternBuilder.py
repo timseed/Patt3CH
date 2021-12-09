@@ -25,28 +25,32 @@ class PatternBuilder:
         return "".join(output)
 
     def call_to_skimmer_format3(self, call):
-        output = [call[0], call[1], call[2]]
-        for c in call[3:]:
-            if c.isnumeric():
-                output.append("#")
-            elif c.isalpha():
-                output.append("@")
-            else:
-                output.append(c)
-        return "".join(output)
+        try:
+            output = [call[0], call[1], call[2]]
+            for c in call[3:]:
+                if c.isnumeric():
+                    output.append("#")
+                elif c.isalpha():
+                    output.append("@")
+                else:
+                    output.append(c)
+            return "".join(output)
+        except Exception as err:
+            print(f"Error processing call <{call}>")
+            return ""
 
-    def __init__(self):
+    def __init__(self,master_file="MASTER.SCP"):
         junk = 1
         self.data = []
-        self.df = self.load()
+        self.df = self.load(master_file)
         self.makecolumns()
         self.output("format1.lst", self.df['SKIMMER_FORMAT1'].unique())
         self.output("format2.lst", self.df['SKIMMER_FORMAT2'].unique())
         self.output("format3.lst", self.df['SKIMMER_FORMAT3'].unique())
 
-    def load(self) -> pd.DataFrame:
-        print("Loading")
-        with open("MASTER.SCP", "rt") as mt:
+    def load(self, filename:str ) -> pd.DataFrame:
+        print(f"Loading {filename}")
+        with open(filename, "rt") as mt:
             self.data = [d for d in mt.read().upper().split("\n")[4:] if len(d) > 0]
         d = pd.DataFrame(self.data)
         d.columns = ["CALLS"]
@@ -75,6 +79,9 @@ class PatternBuilder:
 
 
 if __name__ == "__main__":
+    import sys
     print("Running")
-    pb = PatternBuilder()
+    master = sys.argv[1]
+    print(f"Checking pattern file {master}")
+    pb = PatternBuilder(master_file=master)
     print("Finished")
