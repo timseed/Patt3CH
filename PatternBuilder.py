@@ -2,6 +2,24 @@ import pandas as pd
 
 
 class PatternBuilder:
+
+
+    def call_to_skimmer_format(self, prefix_length, call):
+        if len(call) > prefix_length:
+            output = [call[0:prefix_length]]
+            for c in call[prefix_length:]:
+                if c.isnumeric():
+                    output.append("#")
+                elif c.isalpha():
+                    output.append("@")
+                else:
+                    output.append(c)
+            return "".join(output)
+        else:
+            return call
+            
+
+
     def call_to_skimmer_format0(self, call):
         output = []
         for c in call:
@@ -55,10 +73,8 @@ class PatternBuilder:
         self.data = []
         self.df = self.load(master_file)
         self.makecolumns()
-        self.output("format0.lst", self.df['SKIMMER_FORMAT0'].unique())
-        self.output("format1.lst", self.df['SKIMMER_FORMAT1'].unique())
-        self.output("format2.lst", self.df['SKIMMER_FORMAT2'].unique())
-        self.output("format3.lst", self.df['SKIMMER_FORMAT3'].unique())
+        for n in range(0,5):
+            self.output(f"format{n}.lst", self.df[f'SKIMMER_FORMAT_G{n}'].unique())
 
     def load(self, filename:str ) -> pd.DataFrame:
         print(f"Loading {filename}")
@@ -69,22 +85,10 @@ class PatternBuilder:
         return d
 
     def makecolumns(self):
-        self.df["STARTS0"] = self.df.CALLS.apply(lambda x: (x + "  ")[0])
-        self.df["STARTS1"] = self.df.CALLS.apply(lambda x: (x + "  ")[0:1])
-        self.df["STARTS2"] = self.df.CALLS.apply(lambda x: (x + "  ")[0:2])
-        self.df["STARTS3"] = self.df.CALLS.apply(lambda x: (x + "  ")[0:3])
-        self.df["SKIMMER_FORMAT0"] = self.df.CALLS.apply(
-            lambda x: self.call_to_skimmer_format0(x)
-        )
-        self.df["SKIMMER_FORMAT1"] = self.df.CALLS.apply(
-            lambda x: self.call_to_skimmer_format1(x)
-        )
-        self.df["SKIMMER_FORMAT2"] = self.df.CALLS.apply(
-            lambda x: self.call_to_skimmer_format2(x)
-        )
-        self.df["SKIMMER_FORMAT3"] = self.df.CALLS.apply(
-            lambda x: self.call_to_skimmer_format3(x)
-        )
+        for n in range(0,5):
+            self.df[f"STARTS{n}"] = self.df.CALLS.apply(lambda x: (x + "  ")[0:n])
+        for n in range(0,5):
+            self.df[f"SKIMMER_FORMAT_G{n}"] = self.df.CALLS.apply( lambda x: self.call_to_skimmer_format(n, x))
 
     def output(self, filename, data_as_list):
         data_as_list.sort()
