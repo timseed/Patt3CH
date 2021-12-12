@@ -126,7 +126,9 @@ then 4 characters are kept,
 so the pattern of 3DA0RU is 3DA0@@.
 ```
 
-Just what constitutes as a popular,
+So with that rule explained, I have re-implemented the PatternBuilder, incorporating a count of the template - this is used to generate the + pro-sign on the lines.
+
+
 
 
    
