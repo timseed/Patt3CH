@@ -2,7 +2,37 @@ import pandas as pd
 
 
 class PatternBuilder:
-    def call_to_skimmer_format(self, prefix_length, call):
+
+    def call_to_skimmer_format(self, prefix_length:int, call:str) -> str:
+        """
+
+        :param prefix_length:
+        :param call:
+        :return:
+        """
+        for pos in range(0,len(call)+1):
+            output=[]
+            for c in call[pos:]:
+                if c.isnumeric():
+                    output.append("#")
+                elif c.isalpha():
+                    output.append("@")
+                else:
+                    output.append(c)
+            template_str= "".join(output)
+            if template_str.startswith('@#@'):
+                #Only the 1st two chars of the original are needed
+                return call[:2]+template_str[2:]
+            if template_str.startswith('#@@'):
+                # need 1st 4 chars of the original are needed
+                return call[:4]+template_str[4:]
+            else:
+                return call[:prefix_length]+template_str[prefix_length:]
+
+
+
+
+    def old_call_to_skimmer_format(self, prefix_length, call):
         if len(call) > prefix_length:
             output = [call[0:prefix_length]]
             for c in call[prefix_length:]:

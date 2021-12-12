@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 
 PYSRC= "."
-PYTEST=
+PYTEST="./test/"
 PYDATA="./"
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
