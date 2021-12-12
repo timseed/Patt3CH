@@ -11,6 +11,7 @@ PYTHON=~/${VENV_NAME}/bin/python3
 PIP=pip3
 PYCOV=$(PYTHON) -m coverage
 Package=""
+current_version = '0.0.a'
 
 check:
 	$(PYTHON) -m pylint -E            $(PYSRC)
@@ -34,8 +35,6 @@ update-data:
 	$(info  "")
 	$(info  "")
 	$(info  "Failing to do this will mean you use the old data.")
-
-
 
 bump-minor:
 	$(PYTHON) -m bumpversion minor --tag --commit
@@ -76,4 +75,4 @@ buildmasterplus:
 
 
 all : buildmasterplus test0p test1p
-#test build install	
+#test build install
