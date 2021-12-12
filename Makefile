@@ -1,30 +1,79 @@
+.DEFAULT_GOAL := all
+
+PYSRC= "."
+PYTEST=
+PYDATA="./"
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+VENV_NAME=pe39
+VENV_ACTIVATE=. ~/$(VENV_NAME)/bin/activate
+PYTHON=~/${VENV_NAME}/bin/python3
+PIP=pip3
+PYCOV=$(PYTHON) -m coverage
+Package=""
+
+check:
+	$(PYTHON) -m pylint -E            $(PYSRC)
+	$(PYTHON) -m black --check --diff $(PYSRC)
+
+format:
+	$(PYTHON) -m black $(PYSRC)
+
+
+test:
+	$(PYTHON) -m pytest $(PYTST)
+
+coverage:
+	pytest --cov=$(PYSRC)
+
+update-data:
+	wget http://www.supercheckpartial.com/MASTER.SCP -O $(ROOT_DIR)$(PYDATA)"MASTER.SCP"
+	$(info  "")
+	$(info  "")
+	$(info  "Data Files need adding in Git. And a new version needs to be installed.")
+	$(info  "")
+	$(info  "")
+	$(info  "Failing to do this will mean you use the old data.")
+
+
+
+bump-minor:
+	$(PYTHON) -m bumpversion minor --tag --commit
+
+bump-patch:
+	$(PYTHON) -m bumpversion patch --tag --commit
+
+test0:
+	$(PYTHON) SkimPattern.py format0.lst
+
 test1:
-	python3 SkimPattern.py format1.lst
+	$(PYTHON) SkimPattern.py format1.lst
 
 test2:
-	python3 SkimPattern.py format2.lst
+	$(PYTHON) SkimPattern.py format2.lst
 
 test3:
-	python3 SkimPattern.py format3.lst
+	$(PYTHON) SkimPattern.py format3.lst
+
+test0p:
+	$(PYTHON) SkimPattern.py format0.lst MASTERPLUS.SCP
 
 test1p:
-	python3 SkimPattern.py format1.lst MASTERPLUS.SCP
+	$(PYTHON) SkimPattern.py format1.lst MASTERPLUS.SCP
 
 test2p:
-	python3 SkimPattern.py format2.lst MASTERPLUS.SCP
+	$(PYTHON) SkimPattern.py format2.lst MASTERPLUS.SCP
 
 test3p:
-	python3 SkimPattern.py format3.lst MASTERPLUS.SCP
+	$(PYTHON) SkimPattern.py format3.lst MASTERPLUS.SCP
 
 buildmaster:
-	python3 PatternBuilder.py MASTER.SCP
+	$(PYTHON) PatternBuilder.py MASTER.SCP
 
 buildmasterplus:
 	#cat MASTER.SCP calls.txt |sort | uniq > MASTERPLUS.SCP
-	python3 PatternBuilder.py MASTERPLUS.SCP
+	$(PYTHON) PatternBuilder.py MASTERPLUS.SCP
 
 
-all:
-	test1
-	test2
-	test3
+all : buildmasterplus test0p test1p
+#test build install	
