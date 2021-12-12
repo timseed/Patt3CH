@@ -23,7 +23,7 @@ class PatternBuilder:
         self.makecolumns()
         for n in range(0, 5):
             self.output(f"format{n}.lst", self.df[f"SKIMMER_FORMAT_G{n}"].unique())
-        self.current_version = '0.0.a'
+        self.current_version = '0.0.0'
 
 
     def load(self, filename: str) -> pd.DataFrame:
