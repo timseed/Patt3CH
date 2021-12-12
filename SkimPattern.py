@@ -39,9 +39,10 @@ class SkimmerPattern:
     def load_master(self):
         with open(self._master, "rt") as scp_file:
             for c in scp_file.read().upper().split("\n")[4:]:
-                self.calls[c] = {}
-                self.calls[c]["matched_count"] = 0
-                self.calls[c]["matched_patt"] = []
+                if len(c) > 2:
+                    self.calls[c] = {}
+                    self.calls[c]["matched_count"] = 0
+                    self.calls[c]["matched_patt"] = []
 
     def process(self):
         progress = 0

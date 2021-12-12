@@ -50,19 +50,28 @@ class PatternBuilder:
         self.make_columns()
         for n in range(0, 5):
             # We need to get the totals/averages
-            df_count = self.df[[f"SKIMMER_FORMAT_G{n}"]]
-            df_count['COUNT'] = self.df[f"SKIMMER_FORMAT_G{n}"]
-            df_count2 = df_count.groupby(f"SKIMMER_FORMAT_G{n}").agg({'COUNT': 'count'}).reset_index().sort_values(
-                'COUNT', ascending=False)
+            df_count = self.df.copy()
+            df_count.reset_index(inplace=True)
+            df_count.loc[:, "COUNT"] = self.df[f"SKIMMER_FORMAT_G{n}"]
+
+            df_count2 = (
+                df_count.groupby(f"SKIMMER_FORMAT_G{n}")
+                .agg({"COUNT": "count"})
+                .reset_index()
+                .sort_values("COUNT", ascending=False)
+            )
             cnt_mean = df_count2.COUNT.mean()
             cnt_sd = df_count2.COUNT.std()
-            print(f"cnt_mean is {cnt_mean}")
-            print(f"cnt_sd   is {cnt_sd}")
+            print(f"Length {n} mean is {cnt_mean} std {cnt_sd}")
+            df_count2["COMMON"] = df_count2.COUNT.apply(
+                lambda x: 1 if x >= cnt_mean else 0
+            )
 
-            df_count2['COMMON'] = df_count2.COUNT.apply(lambda x: 1 if x >= cnt_mean else 0)
-
-            self.output(f"format{n}.lst", df_count2[df_count2.COMMON==1][f"SKIMMER_FORMAT_G{n}"].unique(),
-                        self.df[f"SKIMMER_FORMAT_G{n}"].unique())
+            self.output(
+                f"format{n}.lst",
+                df_count2[df_count2.COMMON == 1][f"SKIMMER_FORMAT_G{n}"].unique(),
+                self.df[f"SKIMMER_FORMAT_G{n}"].unique(),
+            )
         self.current_version = "0.1.0"
 
     def load(self, filename: str) -> pd.DataFrame:
