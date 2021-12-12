@@ -19,7 +19,7 @@ class SkimmerPattern:
         self.save_results()
         self.check_skimmer_rules()
         self.check_master_rules()
-        self.current_version = '0.1.0'
+        self.current_version = "0.1.0"
 
     def skim_to_regex(self, skim_expression: str) -> str:
         skim_expression = skim_expression.replace("@", "[A-Z]")
