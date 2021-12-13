@@ -11,7 +11,7 @@ PYTHON=~/${VENV_NAME}/bin/python3
 PIP=pip3
 PYCOV=$(PYTHON) -m coverage
 Package=""
-current_version = '0.1.0'
+current_version = '0.2.0'
 
 check:
 	$(PYTHON) -m pylint -E            $(PYSRC)

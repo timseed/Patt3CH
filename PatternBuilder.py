@@ -72,7 +72,7 @@ class PatternBuilder:
                 df_count2[df_count2.COMMON == 1][f"SKIMMER_FORMAT_G{n}"].unique(),
                 self.df[f"SKIMMER_FORMAT_G{n}"].unique(),
             )
-        self.current_version = "0.1.0"
+        self.current_version = "0.2.0"
 
     def load(self, filename: str) -> pd.DataFrame:
         print(f"Loading {filename}")
